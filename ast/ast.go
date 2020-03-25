@@ -35,11 +35,24 @@ type ReturnStatement struct {
 	ReturnValue Expression
 }
 
+func (ls *LetStatement) statementNode()       {}
+func (ls *LetStatement) TokenLiteral() string { return ls.Token.Literal }
+
+func (ls *LetStatement) String() string {
+	var out bytes.Buffer
+	out.WriteString(ls.TokenLiteral() + " ")
+	out.WriteString(ls.Name.String())
+	out.WriteString(" = ")
+
+	if ls.Value != nil {
+		out.WriteString(ls.Value.String())
+	}
+	out.WriteString(";")
+	return out.String()
+}
+
 func (rs *ReturnStatement) statementNode()       {}
 func (rs *ReturnStatement) TokenLiteral() string { return rs.Token.Literal }
-
-func (ls *LetStatement) StatementNode()       {}
-func (ls *LetStatement) TokenLiteral() string { return ls.Token.Literal }
 
 type Identifier struct {
 	Token token.Token // the token.IDENT token
@@ -72,3 +85,22 @@ func (p *Program) String() string {
 	}
 	return out.String()
 }
+
+func (rs *ReturnStatement) String() string {
+	var out bytes.Buffer
+	out.WriteString(rs.TokenLiteral() + " ")
+	if rs.ReturnValue != nil {
+		out.WriteString(rs.ReturnValue.String())
+	}
+	out.WriteString(";")
+	return out.String()
+}
+
+func (es *ExpressionStatement) String() string {
+	if es.Expression != nil {
+		return es.Expression.String()
+	}
+	return ""
+}
+
+func (i *Identifier) String() string { return i.Value }
