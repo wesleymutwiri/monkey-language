@@ -1,0 +1,144 @@
+package parser
+
+import (
+	"fmt"
+	"monkey/ast"
+	"monkey/lexer"
+	"monkey/token"
+)
+
+type Parser struct {
+	l         *lexer.Lexer
+	curToken  token.Token
+	peekToken token.Token
+	prefixParseFns map[token.TokenType] prefixParseFn
+	infixParseFns map[token.TokenType]infixParseFn
+	errors    []string
+}
+
+type {
+	prefixParseFn func() ast.Expression
+	infixParseFn func(ast.Expression) ast.Expression
+}
+
+func New(l *lexer.Lexer) *Parser {
+	p := &Parser{l: l, errors: []string{}}
+	p.nextToken()
+	p.nextToken()
+	return p
+}
+
+// function for storing the various errors occurred during the parsing process. Stored in a slice errors 
+func (p *Parser) Errors() []string {
+	return p.errors
+}
+
+// function for checking the next statements in the parser in order to present errors to the user
+func (p *Parser) peekError(t token.TokenType) {
+	msg := fmt.Sprintf("expected next token to be %s, got %s instead", t, p.peekToken.Type)
+	p.errors = append(p.errors, msg)
+}
+
+// function for moving from token to token parsing the statements into the AST
+func (p *Parser) nextToken() {
+	p.curToken = p.peekToken
+	p.peekToken = p.l.NextToken()
+}
+
+func (p *Parser) ParseProgram() *ast.Program {
+	program := &ast.Program{}
+	program.Statements = []ast.Statement{}
+
+	for p.curToken.Type != token.EOF {
+		stmt := p.parseStatement()
+		if stmt != nil {
+			program.Statements = append(program.Statements, stmt)
+		}
+		p.nextToken()
+	}
+	return program
+}
+
+// switch statement for parsing the statements received to functions that map them to the AST tree
+func (p *Parser) parseStatement() ast.Statement {
+	switch p.curToken.Type {
+	case token.LET:
+		return p.parseLetStatement()
+	case token.RETURN:
+		return p.parseReturnStatement()
+	default:
+		return p.parseExpressionStatement()
+	}
+}
+
+// parseLetStatement is a statement for trying to parse the let function in monkey(Slight error not sure where)
+func (p *Parser) parseLetStatement() *ast.LetStatement {
+	stmt := &ast.LetStatement{Token: p.curToken}
+
+	if !p.expectPeek(token.IDENT) {
+		return nil
+	}
+	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+
+	if !p.expectPeek(token.ASSIGN) {
+		return nil
+	}
+
+	for !p.curTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+	return stmt
+}
+
+// parseReturnStatement is a function used to parse the return statements in monkey. Breaks down the statement into individual components to be parsed
+func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
+	stmt := &ast.ReturnStatement{Token: p.curToken}
+	p.nextToken()
+
+	for !p.curTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+	return stmt
+}
+
+// function for checking the current token being parsed
+func (p *Parser) curTokenIs(t token.TokenType) bool {
+	return p.curToken.Type == t
+}
+
+// function for checking whether there is an extra token after the current one being parsed
+func (p *Parser) peekTokenIs(t token.TokenType) bool {
+	return p.peekToken.Type == t
+}
+
+//function for allowing the parser to check further into the expression to see extra expressions
+func (p *Parser) expectPeek(t token.TokenType) bool {
+	if p.peekTokenIs(t) {
+		p.nextToken()
+		return true
+	} else {
+		p.peekError(t)
+		return false
+	}
+}
+
+func(p *Parser) registerPrefix(tokenType token.TokenType, fn prefixParseFn) {
+	p.prefixParseFns[tokenType] = fn
+}
+
+func (p *Parser) registerInfix(tokenType token.TokenType, fn infixParseFn) {
+	p.infixParseFns[tokenType] = fn
+}
+
+// parseExpressionStatement for parsing any other statement
+// other than let and return statements
+// useful for making even variable names as statements
+func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
+	stmt := &ast.ExpressionStatement{Token: p.curToken}
+	stmt.Expression = p.parseExpression(LOWEST)
+
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+	return stmt
+}
