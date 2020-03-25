@@ -28,15 +28,18 @@ func New(l *lexer.Lexer) *Parser {
 	return p
 }
 
+// function for storing the various errors occurred during the parsing process. Stored in a slice errors 
 func (p *Parser) Errors() []string {
 	return p.errors
 }
 
+// function for checking the next statements in the parser in order to present errors to the user
 func (p *Parser) peekError(t token.TokenType) {
 	msg := fmt.Sprintf("expected next token to be %s, got %s instead", t, p.peekToken.Type)
 	p.errors = append(p.errors, msg)
 }
 
+// function for moving from token to token parsing the statements into the AST
 func (p *Parser) nextToken() {
 	p.curToken = p.peekToken
 	p.peekToken = p.l.NextToken()
@@ -56,6 +59,7 @@ func (p *Parser) ParseProgram() *ast.Program {
 	return program
 }
 
+// switch statement for parsing the statements received to functions that map them to the AST tree
 func (p *Parser) parseStatement() ast.Statement {
 	switch p.curToken.Type {
 	case token.LET:
@@ -63,7 +67,7 @@ func (p *Parser) parseStatement() ast.Statement {
 	case token.RETURN:
 		return p.parseReturnStatement()
 	default:
-		return nil
+		return p.parseExpressionStatement()
 	}
 }
 
@@ -97,14 +101,17 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 	return stmt
 }
 
+// function for checking the current token being parsed
 func (p *Parser) curTokenIs(t token.TokenType) bool {
 	return p.curToken.Type == t
 }
 
+// function for checking whether there is an extra token after the current one being parsed
 func (p *Parser) peekTokenIs(t token.TokenType) bool {
 	return p.peekToken.Type == t
 }
 
+//function for allowing the parser to check further into the expression to see extra expressions
 func (p *Parser) expectPeek(t token.TokenType) bool {
 	if p.peekTokenIs(t) {
 		p.nextToken()
@@ -121,4 +128,17 @@ func(p *Parser) registerPrefix(tokenType token.TokenType, fn prefixParseFn) {
 
 func (p *Parser) registerInfix(tokenType token.TokenType, fn infixParseFn) {
 	p.infixParseFns[tokenType] = fn
+}
+
+// parseExpressionStatement for parsing any other statement
+// other than let and return statements
+// useful for making even variable names as statements
+func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
+	stmt := &ast.ExpressionStatement{Token: p.curToken}
+	stmt.Expression = p.parseExpression(LOWEST)
+
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+	return stmt
 }
