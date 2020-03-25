@@ -109,11 +109,11 @@ func TestIdentifierExpression(t *testing.T) {
 	program := p.ParseProgram()
 	checkParserErrors(t, p)
 
-	if len(prorgam.Statements) != 1 {
+	if len(program.Statements) != 1 {
 		t.Fatalf("Program has not enough statements, got=%d", len(program.Statements))
 	}
 
-	stmt, ok := program.Statements[0].(*ast.ExpresionStatement)
+	stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
 
 	if !ok {
 		t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got=%T", program.Statements[0])
