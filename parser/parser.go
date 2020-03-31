@@ -182,9 +182,7 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
-	// for !p.curTokenIs(token.SEMICOLON) {
-	// 	p.nextToken()
-	// }
+
 	return stmt
 }
 
@@ -200,9 +198,6 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 		p.nextToken()
 	}
 
-	// for !p.curTokenIs(token.SEMICOLON) {
-	// 	p.nextToken()
-	// }
 	return stmt
 }
 
