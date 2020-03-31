@@ -41,6 +41,16 @@ type IntegerLiteral struct {
 	Value int64
 }
 
+type Identifier struct {
+	Token token.Token // the token.IDENT token
+	Value string
+}
+
+type ExpressionStatement struct {
+	Token      token.Token // the first token of the expression
+	Expression Expression
+}
+
 type PrefixExpression struct {
 	Token    token.Token
 	Operator string
@@ -75,6 +85,12 @@ type FunctionLiteral struct {
 	Token      token.Token // the 'fn' token
 	Parameters []*Identifier
 	Body       *BlockStatement
+}
+
+type CallExpression struct {
+	Token     token.Token // The '(' token
+	Function  Expression  // Identifier or FunctionLiteral
+	Arguments []Expression
 }
 
 func (b *Boolean) expressionNode() {}
@@ -132,11 +148,6 @@ func (ls *LetStatement) String() string {
 func (rs *ReturnStatement) statementNode()       {}
 func (rs *ReturnStatement) TokenLiteral() string { return rs.Token.Literal }
 
-type Identifier struct {
-	Token token.Token // the token.IDENT token
-	Value string
-}
-
 func (i *Identifier) expressionNode()      {}
 func (i *Identifier) TokenLiteral() string { return i.Token.Literal }
 
@@ -146,11 +157,6 @@ func (p *Program) TokenLiteral() string {
 	} else {
 		return ""
 	}
-}
-
-type ExpressionStatement struct {
-	Token      token.Token // the first token of the expression
-	Expression Expression
 }
 
 func (es *ExpressionStatement) statementNode()       {}
@@ -224,5 +230,23 @@ func (fl *FunctionLiteral) String() string {
 	out.WriteString(strings.Join(params, ","))
 	out.WriteString(")")
 	out.WriteString(fl.Body.String())
+	return out.String()
+}
+
+func (ce *CallExpression) expressionNode()      {}
+func (ce *CallExpression) TokenLiteral() string { return ce.Token.Literal }
+func (ce *CallExpression) String() string {
+	var out bytes.Buffer
+	args := []string{}
+
+	for _, a := range ce.Arguments {
+		args = append(args, a.String())
+	}
+
+	out.WriteString(ce.Function.String())
+	out.WriteString("(")
+	out.WriteString(strings.Join(args, ", "))
+	out.WriteString(")")
+
 	return out.String()
 }
