@@ -50,7 +50,7 @@ func evalPrefixExpression(operator string, right object.Object) object.Object {
 	case "!":
 		return evalBangOperatorExpression(right)
 	case "-":
-		return evalMinuxPrefixOperatorExpression(right)
+		return evalMinusPrefixOperatorExpression(right)
 	default:
 		return NULL
 	}
