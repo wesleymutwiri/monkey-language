@@ -21,6 +21,9 @@ const (
 	LBRACE    = "{"
 	RBRACE    = "}"
 
+	LBRACKET = "["
+	RBRACKET = "]"
+
 	MINUS    = "-"
 	BANG     = "!"
 	ASTERISK = "*"
