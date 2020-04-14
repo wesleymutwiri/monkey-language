@@ -7,9 +7,9 @@ This is a Basic Go implementation of Thorsten Ball's "Writing an Interpreter in 
 - [x] Create a lexer
 - [x] Create a REPL for evaluating the language
 - [x] Create a Parser
-- [ ] Evaluating Symbols,functions, function calls etc
-- [ ] Extending the interpreter to include data structures
-- [ ] Adding additional tests
+- [x] Evaluating Symbols,functions, function calls etc
+- [x] Extending the interpreter to include data structures
+- [] Adding additional tests
 - [ ] Documenting how to use the language
 - [ ] Macro systems for the language
 - [ ] Other features
