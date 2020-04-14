@@ -20,6 +20,7 @@ const (
 	RPAREN    = ")"
 	LBRACE    = "{"
 	RBRACE    = "}"
+	COLON     = ":"
 
 	LBRACKET = "["
 	RBRACKET = "]"
