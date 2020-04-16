@@ -9,7 +9,7 @@ This is a Basic Go implementation of Thorsten Ball's "Writing an Interpreter in 
 - [x] Create a Parser
 - [x] Evaluating Symbols,functions, function calls etc
 - [x] Extending the interpreter to include data structures
-- [] Adding additional tests
+- [ ] Adding additional tests
 - [ ] Documenting how to use the language
 - [ ] Macro systems for the language
 - [ ] Other features
