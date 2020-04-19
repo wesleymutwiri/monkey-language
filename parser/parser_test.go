@@ -711,7 +711,7 @@ func TestParsingHashLiteralsStringKeys(t *testing.T) {
 	hash, ok := stmt.Expression.(*ast.HashLiteral)
 
 	if !ok {
-		t.Fatalf("exp is not ast.Hashliteral. got=%T", stmt.Expression)
+		t.Fatalf("exp is not ast.HashLiteral. got=%T", stmt.Expression)
 	}
 
 	if len(hash.Pairs) != 3 {
