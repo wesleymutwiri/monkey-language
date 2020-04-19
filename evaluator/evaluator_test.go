@@ -54,7 +54,7 @@ func testIntegerObject(t *testing.T, obj object.Object, expected int64) bool {
 		t.Errorf("object has wrong value. got=%d, want=%d", result.Value, expected)
 		return false
 	}
-	return false
+	return true
 }
 
 func TestEvalBooleanExpression(t *testing.T) {
@@ -454,7 +454,7 @@ func TestHashLiterals(t *testing.T) {
 	input := `let two = "two";
 	{
 		"one": 10 - 9,
-		"two": 1 + 1,
+		two: 1 + 1,
 		"thr" + "ee": 6 / 2,
 		4: 4,
 		true: 5,
@@ -464,14 +464,14 @@ func TestHashLiterals(t *testing.T) {
 	evaluated := testEval(input)
 	result, ok := evaluated.(*object.Hash)
 	if !ok {
-		t.Fatalf("eval didn't return Hash. got=%T (%+v)", evaluated, evaluated)
+		t.Fatalf("Eval didn't return Hash. got=%T (%+v)", evaluated, evaluated)
 	}
 
 	expected := map[object.HashKey]int64{
 		(&object.String{Value: "one"}).HashKey():   1,
 		(&object.String{Value: "two"}).HashKey():   2,
 		(&object.String{Value: "three"}).HashKey(): 3,
-		(&object.String{Value: "4"}).HashKey():     4,
+		(&object.Integer{Value: 4}).HashKey():      4,
 		TRUE.HashKey():                             5,
 		FALSE.HashKey():                            6,
 	}
@@ -501,7 +501,7 @@ func TestHashIndexExpressions(t *testing.T) {
 		},
 		{
 			`{"foo": 5}["bar"]`,
-			5,
+			nil,
 		},
 		{
 			`let key = "foo"; {"foo": 5}[key]`,
