@@ -89,14 +89,14 @@ true
 
 ## Types in the language
 
-Type | Syntax |  
-\_ \_ \_ _|_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_|
-null | `null` |
-bool | `true false` |
-int | `0 42 1234 5` |
-str | `"" "foo" "\"something\" and a\n line break"` |
-array | `[] [1, 2] [1, 2, 3]` |
-hash | `{} {"a": 1} {"a": 1, "b": 2}` |
+| Type  |                    Syntax                     |
+| ----- | :-------------------------------------------: |
+| null  |                    `null`                     |
+| bool  |                 `true false`                  |
+| int   |                 `0 42 1234 5`                 |
+| str   | `"" "foo" "\"something\" and a\n line break"` |
+| array |             `[] [1, 2] [1, 2, 3]`             |
+| hash  |        `{} {"a": 1} {"a": 1, "b": 2}`         |
 
 ## Features to be Implemented
 
