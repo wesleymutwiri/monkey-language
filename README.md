@@ -36,6 +36,68 @@ Welcome to the Monkey Programming Language.
 - In order to run the tests run this simple command `bash go test ./...` in order to run all tests written for the monkey language
   You can also test the packages individually by using `bash go test ./<name_of_package_to_test>`
 
+## Sample Language functions
+
+```bash
+>> let add = fn(a, b, c, d) { return a + b + c + d };
+
+>> add(1, 2, 3, 4);
+10
+
+>> let addThree = fn(x) { return x + 3 };
+
+>> addThree(3);
+6
+
+>> let max = fn(x, y) { if (x > y) { x } else { y } };
+
+>> max(5, 10)
+10
+
+>> let factorial = fn(n) { if (n == 0) { 1 } else { n * factorial(n - 1) } };
+
+>> factorial(5)
+120
+
+>> let callTwoTimes = fn(x, func) { func(func(x)) };
+
+>> callTwoTimes(3, addThree);
+9
+
+>> callTwoTimes(3, fn(x) { x + 1});
+5
+
+>> let newAdder = fn(x) { fn(n) { x + n } };
+
+>> let addTwo = newAdder(2);
+
+>> addTwo(2);
+4
+
+>> let multiply = fn(x, y) { x * y };
+
+>> multiply(50 / 2, 1 * 2)
+50
+
+>> fn(x) { x == 10 }(5)
+false
+
+>> fn(x) { x == 10}(10)
+true
+
+```
+
+## Types in the language
+
+Type | Syntax |  
+\_ \_ \_ _|_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_ \_|
+null | `null` |
+bool | `true false` |
+int | `0 42 1234 5` |
+str | `"" "foo" "\"something\" and a\n line break"` |
+array | `[] [1, 2] [1, 2, 3]` |
+hash | `{} {"a": 1} {"a": 1, "b": 2}` |
+
 ## Features to be Implemented
 
 - [x] Create a lexer
