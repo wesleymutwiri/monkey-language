@@ -1,6 +1,40 @@
 # Monkey Language
 
-This is a Basic Go implementation of Thorsten Ball's "Writing an Interpreter in Go" book. It involves creating an interpreted language in Go that does basic functions. The language will go wider and further by adding a couple of packages in order to make the language more feature rich compared to the one described in the book.
+This is a Basic Go implementation of Thorsten Ball's "Writing an Interpreter in Go" book. It involves creating an interpreted language in Go that does basic functions.
+
+## Prerequisites
+
+Before you continue, ensure you meet the following requirements:
+
+- You have installed the latest version of Golang.
+- You are using a Linux or Mac OS machine. Windows is not currently supported.
+- You have git installed on your machine.
+
+## How to install
+
+- change directory into a folder you want to use the monkey language:
+- Clone the repository into your machine
+
+```bash
+$ git clone https://github.com/wesleymutwiri/monkey-language.git
+```
+
+- change directory into the newly cloned application in your machine by using the following command
+
+```bash
+$ cd monkey-language
+```
+
+- To run the language is as simple as running
+
+```bash
+$ go run main.go
+Welcome to the Monkey Programming Language.
+>>
+```
+
+- In order to run the tests run this simple command `bash go test ./...` in order to run all tests written for the monkey language
+  You can also test the packages individually by using `bash go test ./<name_of_package_to_test>`
 
 ## Features to be Implemented
 
@@ -32,3 +66,7 @@ coming soon
 ### Website for presenting my own version of the Monkey language
 
 Coming soon
+
+## Acknowledgements
+
+[Writing an interpreter in Go](https://interpreterbook.com/) for giving me the basics needed in creating and implementing the language in Golang
