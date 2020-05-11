@@ -22,6 +22,10 @@ const (
 	OpConstant Opcode = iota
 )
 
+func (ins Instructions) String() string {
+	return ""
+}
+
 func Lookup(op byte) (*Definition, error) {
 	def, ok := definitions[Opcode(op)]
 	if !ok {
