@@ -10,24 +10,12 @@ import (
 	"testing"
 )
 
+type Instructions string
+
 type compilerTestCase struct {
 	input                string
 	expectedConstants    []interface{}
 	expectedInstructions []code.Instructions
-}
-
-func TestIntegerArithmetic(t *testing.T) {
-	tests := []compilerTestCase{
-		{
-			input:             "1 + 2",
-			expectedConstants: []interface{}{1, 2},
-			expectedInstructions: []code.Instructions{
-				code.Make(code.OpConstant, 0),
-				code.Make(code.OpConstant, 1),
-			},
-		},
-	}
-	runCompilerTests(t, tests)
 }
 
 func runCompilerTests(t *testing.T, tests []compilerTestCase) {
@@ -39,13 +27,15 @@ func runCompilerTests(t *testing.T, tests []compilerTestCase) {
 		compiler := New()
 		err := compiler.Compile(program)
 		if err != nil {
+			t.Log(tt.input)
 			t.Fatalf("compiler error: %s", err)
 		}
 
 		bytecode := compiler.Bytecode()
+
 		err = testInstructions(tt.expectedInstructions, bytecode.Instructions)
 		if err != nil {
-			t.Fatalf("testInstructions failed %s", err)
+			t.Fatalf("testInstructions failed: %s", err)
 		}
 
 		err = testConstants(t, tt.expectedConstants, bytecode.Constants)
@@ -66,12 +56,12 @@ func testInstructions(expected []code.Instructions, actual code.Instructions) er
 	concatted := concatInstructions(expected)
 
 	if len(actual) != len(concatted) {
-		return fmt.Errorf("wrong instructions length. \n want=%q \n got = %q", concatted, actual)
+		return fmt.Errorf("wrong instructions length.\n want=%q\ngot =%q", concatted, actual)
 	}
 
 	for i, ins := range concatted {
 		if actual[i] != ins {
-			return fmt.Errorf("wrong instruction at %d. \n want=%q \n got=%q", i, concatted, actual)
+			return fmt.Errorf("wrong instruction at %d.\nwant=%q\ngot= %q", i, concatted, actual)
 		}
 	}
 	return nil
@@ -88,7 +78,7 @@ func concatInstructions(s []code.Instructions) code.Instructions {
 
 func testConstants(t *testing.T, expected []interface{}, actual []object.Object) error {
 	if len(expected) != len(actual) {
-		return fmt.Errorf("Wrong number of constants, got=%d, want=%d", len(actual), len(expected))
+		return fmt.Errorf("Wrong number of constants. got=%d, want=%d", len(actual), len(expected))
 	}
 
 	for i, constant := range expected {
@@ -110,7 +100,21 @@ func testIntegerObject(expected int64, actual object.Object) error {
 	}
 
 	if result.Value != expected {
-		return fmt.Errorf("object has wrong valu. got=%d, want=%d", result.Value, expected)
+		return fmt.Errorf("object has wrong value. got=%d, want=%d", result.Value, expected)
 	}
 	return nil
+}
+
+func TestIntegerArithmetic(t *testing.T) {
+	tests := []compilerTestCase{
+		{
+			input:             "1 + 2",
+			expectedConstants: []interface{}{1, 2},
+			expectedInstructions: []code.Instructions{
+				code.Make(code.OpConstant, 0),
+				code.Make(code.OpConstant, 1),
+			},
+		},
+	}
+	runCompilerTests(t, tests)
 }
