@@ -2,11 +2,11 @@ package compiler
 
 import (
 	"fmt"
-	"monkey/ast"
-	"monkey/code"
-	"monkey/lexer"
-	"monkey/object"
-	"monkey/parser"
+	"github.com/wesleymutwiri/monkey-language/ast"
+	"github.com/wesleymutwiri/monkey-language/code"
+	"github.com/wesleymutwiri/monkey-language/lexer"
+	"github.com/wesleymutwiri/monkey-language/object"
+	"github.com/wesleymutwiri/monkey-language/parser"
 	"testing"
 )
 

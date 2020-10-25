@@ -2,9 +2,10 @@ package compiler
 
 import (
 	"fmt"
-	"monkey/ast"
-	"monkey/code"
-	"monkey/object"
+
+	"github.com/wesleymutwiri/monkey-language/ast"
+	"github.com/wesleymutwiri/monkey-language/code"
+	"github.com/wesleymutwiri/monkey-language/object"
 )
 
 type Compiler struct {
@@ -40,10 +41,6 @@ func (c *Compiler) Compile(node ast.Node) error {
 		}
 		c.emit(code.OpPop)
 
-	case *ast.IntegerLiteral:
-		integer := &object.Integer{Value: node.Value}
-		c.emit(code.OpConstant, c.addConstant(integer))
-
 	case *ast.PrefixExpression:
 		err := c.Compile(node.Right)
 		if err != nil {
@@ -77,7 +74,10 @@ func (c *Compiler) Compile(node ast.Node) error {
 		if err != nil {
 			return err
 		}
-
+		err = c.Compile(node.Right)
+		if err != nil {
+			return err
+		}
 		switch node.Operator {
 		case "+":
 			c.emit(code.OpAdd)
@@ -96,6 +96,9 @@ func (c *Compiler) Compile(node ast.Node) error {
 		default:
 			return fmt.Errorf("unknown operator %s", node.Operator)
 		}
+	case *ast.IntegerLiteral:
+		integer := &object.Integer{Value: node.Value}
+		c.emit(code.OpConstant, c.addConstant(integer))
 
 	case *ast.Boolean:
 		if node.Value {
