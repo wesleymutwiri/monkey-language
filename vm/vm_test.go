@@ -2,12 +2,13 @@ package vm
 
 import (
 	"fmt"
-	"monkey/ast"
-	"monkey/compiler"
-	"monkey/lexer"
-	"monkey/object"
-	"monkey/parser"
 	"testing"
+
+	"github.com/wesleymutwiri/monkey-language/ast"
+	"github.com/wesleymutwiri/monkey-language/compiler"
+	"github.com/wesleymutwiri/monkey-language/lexer"
+	"github.com/wesleymutwiri/monkey-language/object"
+	"github.com/wesleymutwiri/monkey-language/parser"
 )
 
 type vmTestCase struct {
@@ -116,7 +117,7 @@ func TestBooleanExpressions(t *testing.T) {
 		{"1 == 2", false},
 		{"1 != 2", true},
 		{"true == true", true},
-		{"false == false", false},
+		{"false == false", true},
 		{"true == false", false},
 		{"false == true", false},
 		{"true != false", true},

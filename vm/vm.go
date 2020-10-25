@@ -2,9 +2,10 @@ package vm
 
 import (
 	"fmt"
-	"monkey/code"
-	"monkey/compiler"
-	"monkey/object"
+
+	"github.com/wesleymutwiri/monkey-language/code"
+	"github.com/wesleymutwiri/monkey-language/compiler"
+	"github.com/wesleymutwiri/monkey-language/object"
 )
 
 const StackSize = 2048
@@ -55,9 +56,7 @@ func (vm *VM) Run() error {
 			if err != nil {
 				return err
 			}
-		case code.OpPop:
-			vm.pop()
-
+		
 		case code.OpTrue:
 			err := vm.push(True)
 			if err != nil {
@@ -86,6 +85,9 @@ func (vm *VM) Run() error {
 			if err != nil {
 				return err
 			}
+		case code.OpPop:
+			vm.pop()
+
 		}
 
 	}
