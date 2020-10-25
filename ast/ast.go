@@ -2,8 +2,9 @@ package ast
 
 import (
 	"bytes"
-	"monkey/token"
 	"strings"
+
+	"github.com/wesleymutwiri/monkey-language/token"
 )
 
 type HashLiteral struct {
