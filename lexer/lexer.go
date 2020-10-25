@@ -1,6 +1,6 @@
 package lexer
 
-import "monkey/token"
+import "github.com/wesleymutwiri/monkey-language/token"
 
 // the lexer for reading the pages of code written
 type Lexer struct {
